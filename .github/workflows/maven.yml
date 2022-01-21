@@ -27,8 +27,8 @@ jobs:
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
-        image: anudevi14/vesselschedulerreader
-        tags: v1
+        image: anudevi14/myfirstapplication
+        tags: v6
         registry: docker.io
         dockerfile: Dockerfile_ci
         username: ${{ secrets.DOCKER_USERNAME }}
