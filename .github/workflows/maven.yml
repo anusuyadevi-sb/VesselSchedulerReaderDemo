@@ -31,5 +31,6 @@ jobs:
         tags: v6
         registry: docker.io
         dockerfile: Dockerfile_ci
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        login: docker login -u anudevi14 -p Learn@IBM123
+        #username: ${{ secrets.DOCKER_USERNAME }}
+        #password: ${{ secrets.DOCKER_PASSWORD }}
