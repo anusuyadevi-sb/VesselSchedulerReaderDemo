@@ -30,6 +30,6 @@ jobs:
         image: anudevi14/vesselschedulerreader
         tags: v1
         registry: docker.io
-        dockerfile: Dockerfile1
+        dockerfile: Dockerfile_ci
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
