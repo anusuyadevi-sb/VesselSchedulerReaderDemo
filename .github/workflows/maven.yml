@@ -32,6 +32,5 @@ jobs:
         tags: latest
         registry: docker.io
         dockerfile: Dockerfile_ci
-        #login: docker login -u anudevi14 -p Learn@IBM123
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
