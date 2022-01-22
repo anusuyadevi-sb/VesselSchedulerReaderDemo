@@ -28,7 +28,7 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: anudevi14/vesselschedulerreader
-        tags: v5
+        tags: v6
         registry: docker.io
         dockerfile: Dockerfile_ci
         username: ${{ secrets.DOCKER_USERNAME }}
