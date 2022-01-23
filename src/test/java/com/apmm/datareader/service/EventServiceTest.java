@@ -36,7 +36,7 @@ import static org.mockito.BDDMockito.given;
     }
 
 @Test
-    public void getAllEvents(){
+     void getAllEvents(){
         Event event= EventUtils.getEvent();
         given(repository.findAll()).willReturn(Flux.just(event));
 
