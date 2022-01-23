@@ -7,12 +7,16 @@ import com.apmm.datareader.service.EventService;
 import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Pattern;
+
 @RestController
 @Slf4j
+
 public class EventController {
 
     @Autowired
@@ -25,7 +29,9 @@ public class EventController {
     }
 
     @GetMapping("/event/{id}")
-        public Mono<EventDto> getEventById(@PathVariable ("id")  String id)    {
+
+        public Mono<EventDto> getEventById(@PathVariable ("id")  String id)  throws BadRequestException  {
+
         log.debug("Controller method in getEventById");
         if (StringUtil.isNullOrEmpty(id)){
             throw new BadRequestException("Please provide id for url : /event/{id}");
@@ -38,18 +44,6 @@ public class EventController {
     @PostMapping
     public Mono<EventDto> save(@RequestBody Mono<Event> employeeDtoMono) {
         return service.save(employeeDtoMono);
-    }
-
-    @PostMapping ("/dbCall")
-
-    public String FromDb(@RequestBody String message) {
-        log.info("DB call::" + message);
-        return "Hello World";
-    }
-
-    @GetMapping("/deployed")
-    public String message(){
-        return "Application deployed successfully in azure";
     }
 
     @PutMapping("event/update/{id}")

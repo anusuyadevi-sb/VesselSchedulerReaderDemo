@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 @ContextConfiguration(classes={EventRepository.class})
 @ExtendWith(SpringExtension.class)
 
-public class EventServiceTest {
+ class EventServiceTest {
 
     private EventService service;
 
@@ -35,7 +35,7 @@ public class EventServiceTest {
         this.service = new EventService(repository,appUtils);
     }
 
-/*@Test
+@Test
     public void getAllEvents(){
         Event event= EventUtils.getEvent();
         given(repository.findAll()).willReturn(Flux.just(event));
@@ -47,11 +47,11 @@ public class EventServiceTest {
                 return true;
         }).expectNextCount(0).expectComplete().verify();
 
-    }*/
+    }
 
 
     @Test
-    public void getAllEventsById(){
+     void getAllEventsById(){
         Event event= EventUtils.getEvent();
         given(repository.findByEventId("123")).willReturn(Mono.just(event));
 
@@ -64,7 +64,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void getAllEventsNodata(){
+     void getAllEventsNodata(){
         Event event= EventUtils.getEvent();
         given(repository.findAll()).willReturn(Flux.empty());
 
@@ -77,7 +77,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void getAllEventsNodataById(){
+     void getAllEventsNodataById(){
         Event event= EventUtils.getEvent();
         given(repository.findByEventId("123")).willReturn(Mono.empty());
 
@@ -89,7 +89,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void saveEventsTest(){
+     void saveEventsTest(){
         Event event= EventUtils.getEvent();
         given(repository.insert(event)).willReturn(Mono.just(event));
 
@@ -102,7 +102,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void updateEventsTest(){
+     void updateEventsTest(){
         Event event= EventUtils.getEvent();
         given(repository.findById("123")).willReturn(Mono.just(event));
 

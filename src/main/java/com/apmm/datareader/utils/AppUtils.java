@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUtils {
 
+    private AppUtils(){
+
+    }
     public static EventDto entityToDto(Event event){
         log.info("Inside entityToDto");
         EventDto eventDto=new EventDto();

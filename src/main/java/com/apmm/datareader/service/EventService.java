@@ -47,7 +47,7 @@ public class EventService {
     }
 
     public Mono<EventDto> save(Mono<Event> eventDtoMono){
-        System.out.println("service method called ...");
+        log.info("service method called ...");
         return  eventDtoMono
                 .flatMap(repository::insert)
 
@@ -68,9 +68,9 @@ public class EventService {
 
         log.info("Inside convertXmlToJson || Id:: "+ data.getId());
         String result = null;
-        String xmlData = data.getEvent_message();
+        String xmlData = data.getEventMessage();
 
-        if ( StringUtil.isNullOrEmpty(data.getEvent_message_json())) {
+        if ( StringUtil.isNullOrEmpty(data.getEventJson())) {
             log.info("JSON data is null or empty || Id:: "+ data.getId());
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(Root.class);
@@ -78,8 +78,8 @@ public class EventService {
                 Root obj = (Root) unmarshaller.unmarshal(new StringReader(xmlData));
                 ObjectMapper mapper = new ObjectMapper();
                 result = mapper.writeValueAsString(obj);
-                log.debug("converted the xml to JSON : : " + result.toString());
-                data.setEvent_message_json(result);
+                log.debug("converted the xml to JSON : : " + result);
+                data.setEventJson(result);
             } catch (JAXBException e) {
                 log.error(e.getLocalizedMessage());
             } catch (JsonProcessingException e) {
@@ -88,14 +88,7 @@ public class EventService {
                 log.error(e.getLocalizedMessage());
             }
 
-        }/*else
-        {
-            log.info("JSON data is not null || Id:: "+ data.getId());
-            return Mono.just(data).map(AppUtils::entityToDto);
-        }*/
-
-        /*log.info("Going to update the data to DB || Id:: "+ data.getId());
-        return updateEvent(Mono.just(data).map(AppUtils::entityToDto), data.getId());*/
+        }
 
         return Mono.just(data).map(AppUtils::entityToDto);
     }

@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = EventController.class)
 @Import(EventService.class)
-public class EventControllerTest {
+ class EventControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -34,7 +34,7 @@ public class EventControllerTest {
 
 
     @Test
-    public void getAllEvents(){
+     void getAllEvents(){
         Event event= EventUtils.getEvent();
         given(service.getEvents()).willReturn( Flux.just(event).map(AppUtils::entityToDto));
 
@@ -44,7 +44,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void getEventById(){
+     void getEventById(){
         Event event= EventUtils.getEvent();
         given(service.getEventById("123")).willReturn( Mono.just(event).map(AppUtils::entityToDto));
 
@@ -53,7 +53,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void getEventByIdNotAv(){
+     void getEventByIdNotAv(){
         Event event= EventUtils.getEvent();
         given(service.getEventById("")).willReturn( Mono.just(event).map(AppUtils::entityToDto));
 
@@ -62,7 +62,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void saveEventTest(){
+     void saveEventTest(){
         Event event= EventUtils.getEvent();
         given(service.save(Mono.just(event))).willReturn(Mono.just(event).map(AppUtils::entityToDto));
 
@@ -71,7 +71,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void updateEventMethodNotAllowedTest(){
+     void updateEventMethodNotAllowedTest(){
         Event event= EventUtils.getEvent();
         given(service.updateEvent(Mono.just(event).map(AppUtils::entityToDto),"123")).willReturn(Mono.just(event).map(AppUtils::entityToDto));
 
@@ -80,7 +80,7 @@ public class EventControllerTest {
     }
 
     @Test
-    public void updateEventTest(){
+     void updateEventTest(){
         Event event= EventUtils.getEvent();
         given(service.updateEvent(Mono.just(event).map(AppUtils::entityToDto),"123")).willReturn(Mono.just(event).map(AppUtils::entityToDto));
 

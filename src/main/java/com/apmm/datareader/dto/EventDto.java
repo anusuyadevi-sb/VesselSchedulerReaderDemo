@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventDto {
     private String id;
-    private String event_id;
-    private String event_message;
-    private String event_message_json;
+    private String eventId;
+    private String eventMessage;
+    private String eventJson;
 
 }
