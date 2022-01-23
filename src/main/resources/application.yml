@@ -6,3 +6,5 @@ Spring:
       database: events1
 server:
   port: 9293
+
+REGISTRY_NAME: Anusuyadevi S B
