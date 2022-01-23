@@ -9,10 +9,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="events1")
+@Document(collection="events")
 public class Event {
     @Id
     private String id;
-    private String message;
+    private String event_id;
+    private String event_message;
+    private String event_message_json;
 
 }

@@ -3,6 +3,7 @@ package com.apmm.datareader.service;
 import com.apmm.datareader.entity.Event;
 import com.apmm.datareader.exception.DataNotFoundException;
 import com.apmm.datareader.repository.EventRepository;
+import com.apmm.datareader.utils.AppUtils;
 import com.apmm.datareader.utils.EventUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,27 +26,34 @@ public class EventServiceTest {
 
     @MockBean
     private  EventRepository repository;
+
+    @MockBean
+    private AppUtils appUtils;
+
     @BeforeEach
     void setUp() {
-        this.service = new EventService(repository);
+        this.service = new EventService(repository,appUtils);
     }
-@Test
+
+/*@Test
     public void getAllEvents(){
         Event event= EventUtils.getEvent();
         given(repository.findAll()).willReturn(Flux.just(event));
 
         StepVerifier.create(
-                service.getEvents()).expectNextMatches(evt->{
+                service.getEvents())
+                .expectNextMatches(evt->{
                 then(evt.getId()).isEqualTo("123");
                 return true;
         }).expectNextCount(0).expectComplete().verify();
 
-    }
+    }*/
+
 
     @Test
     public void getAllEventsById(){
         Event event= EventUtils.getEvent();
-        given(repository.findById("123")).willReturn(Mono.just(event));
+        given(repository.findByEventId("123")).willReturn(Mono.just(event));
 
         StepVerifier.create(
                 service.getEventById("123")).expectNextMatches(evt->{
@@ -71,12 +79,35 @@ public class EventServiceTest {
     @Test
     public void getAllEventsNodataById(){
         Event event= EventUtils.getEvent();
-        given(repository.findById("123")).willReturn(Mono.empty());
+        given(repository.findByEventId("123")).willReturn(Mono.empty());
 
         StepVerifier.create(
                         service.getEventById("123"))
                 .expectError(DataNotFoundException.class).verify();
 
 
+    }
+
+    @Test
+    public void saveEventsTest(){
+        Event event= EventUtils.getEvent();
+        given(repository.insert(event)).willReturn(Mono.just(event));
+
+        StepVerifier.create(
+                service.save(Mono.just(event))
+        ).expectNextMatches(evt->{
+            then(evt.getId()).isEqualTo("123");
+            return true;
+        }).expectNextCount(0).expectComplete().verify();
+    }
+
+    @Test
+    public void updateEventsTest(){
+        Event event= EventUtils.getEvent();
+        given(repository.findById("123")).willReturn(Mono.just(event));
+
+        StepVerifier.create(
+                        service.updateEvent(Mono.just(event).map(AppUtils::entityToDto),"123"))
+                .expectComplete();
     }
 }
