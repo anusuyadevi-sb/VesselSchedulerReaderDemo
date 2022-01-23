@@ -14,8 +14,8 @@ on: [push]
 # Environment variables available to all jobs and steps in this workflow
 env:
   REGISTRY_NAME: vesselschedulerconatiner
-  CLUSTER_NAME: aks-cluster
-  CLUSTER_RESOURCE_GROUP: aks-cluster
+  CLUSTER_NAME: VesselSchedulerReaderCluster
+  CLUSTER_RESOURCE_GROUP: VesselSchedulerReaderCluster
   NAMESPACE: vesselschedulerreaderclusterb11d
 
 jobs:
