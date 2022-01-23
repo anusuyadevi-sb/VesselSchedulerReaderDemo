@@ -9,6 +9,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface EventRepository extends ReactiveMongoRepository<Event,String> {
 
-    @Query("{'event_id' : ?0}")
+    @Query("{'eventId' : ?0}")
     Mono<Event> findByEventId(String eventId);
 }
