@@ -113,7 +113,7 @@ import static org.mockito.BDDMockito.given;
     }
 
     @Test
-    public  void xmlToJsonTest2(){
+      void xmlToJsonTest2(){
         Event event = EventUtils.getEvent();
         event.setEventMessage("Error Data");
         event.setEventJson("");
