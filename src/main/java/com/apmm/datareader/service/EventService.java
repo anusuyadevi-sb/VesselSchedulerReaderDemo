@@ -50,7 +50,6 @@ public class EventService {
         log.info("service method called ...");
         return  eventDtoMono
                 .flatMap(repository::insert)
-
                 .map(AppUtils::entityToDto);
 
     }
@@ -80,11 +79,8 @@ public class EventService {
                 result = mapper.writeValueAsString(obj);
                 log.debug("converted the xml to JSON : : " + result);
                 data.setEventJson(result);
-            } catch (JAXBException e) {
-                log.error(e.getLocalizedMessage());
-            } catch (JsonProcessingException e) {
-                log.error(e.getLocalizedMessage());
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 log.error(e.getLocalizedMessage());
             }
 

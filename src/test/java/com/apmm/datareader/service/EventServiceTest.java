@@ -1,5 +1,6 @@
 package com.apmm.datareader.service;
 
+import com.apmm.datareader.dto.EventDto;
 import com.apmm.datareader.entity.Event;
 import com.apmm.datareader.exception.DataNotFoundException;
 import com.apmm.datareader.repository.EventRepository;
@@ -109,5 +110,15 @@ import static org.mockito.BDDMockito.given;
         StepVerifier.create(
                         service.updateEvent(Mono.just(event).map(AppUtils::entityToDto),"123"))
                 .expectComplete();
+    }
+
+    @Test
+    public  void xmlToJsonTest2(){
+        Event event = EventUtils.getEvent();
+        event.setEventMessage("Error Data");
+        event.setEventJson("");
+        StepVerifier.create(
+                        service.convertXmlToJson(event))
+                .expectError();
     }
 }
