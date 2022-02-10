@@ -97,7 +97,7 @@ public class TestRouterConfig {
                 .value(userResponse -> {
                             Assertions.assertThat(userResponse.getId()).isEqualTo("ABC123");
                             Assertions.assertThat(userResponse.getEventId()).isEqualTo("1");
-                            Assertions.assertThat(userResponse.getEventJson()).isEqualTo("");
+                            Assertions.assertThat(userResponse.getEventJson()).isEmpty();
                             Assertions.assertThat(userResponse.getEventMessage()).isEqualTo("XML Data Error Format");
                         }
                 );

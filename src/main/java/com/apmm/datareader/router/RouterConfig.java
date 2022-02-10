@@ -3,7 +3,7 @@ package com.apmm.datareader.router;
 
 import com.apmm.datareader.handler.EventHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;

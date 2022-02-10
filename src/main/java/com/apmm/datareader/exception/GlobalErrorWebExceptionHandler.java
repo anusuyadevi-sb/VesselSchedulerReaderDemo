@@ -1,11 +1,15 @@
 package com.apmm.datareader.exception;
 
 
+import com.apmm.datareader.constants.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.autoconfigure.web.reactive.error.AbstractErrorWebExceptionHandler;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.context.ApplicationContext;
+
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,14 +24,16 @@ import java.util.Map;
 
 @Component
 @Order(-2)
+@Slf4j
 public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHandler
 {
-    public GlobalErrorWebExceptionHandler(GlobalErrorAttributes globalErrorAttributes, ApplicationContext applicationContext,
+    public GlobalErrorWebExceptionHandler(DefaultErrorAttributes globalErrorAttributes, ApplicationContext applicationContext,
                                           ServerCodecConfigurer serverCodecConfigurer) {
         super(globalErrorAttributes, new WebProperties.Resources(), applicationContext);
         super.setMessageReaders(serverCodecConfigurer.getReaders());
         super.setMessageWriters(serverCodecConfigurer.getWriters());
     }
+
 
     @Override
     protected RouterFunction<ServerResponse> getRoutingFunction(ErrorAttributes errorAttributes) {
@@ -36,35 +42,34 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
     private Mono<ServerResponse> renderErrorResponse(final ServerRequest request) {
 
         final Map<String, Object> map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
-        System.out.println("errorPropertiesMap::"+map.toString());
+        log.info("errorPropertiesMap::"+map.toString());
 
         Map<String,Object> finalMap=new HashMap<>();
-        finalMap.put("status",String.valueOf(map.get("status")));
-        finalMap.put("resources",String.valueOf(map.get("path")));
+        finalMap.put(Constants.STATUS,String.valueOf(map.get(Constants.STATUS)));
+        finalMap.put(Constants.RESOURCES,String.valueOf(map.get(Constants.PATH)));
 
-        String statusFromMap= String.valueOf(map.get("status"));
-        HttpStatus status=HttpStatus.BAD_REQUEST;
+        String statusFromMap= String.valueOf(map.get(Constants.STATUS));
+        HttpStatus status;
         switch (statusFromMap) {
             case "500":
 
-                finalMap.put("message", "Something went wrong.Please try again later");
+                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_500);
                 status=HttpStatus.INTERNAL_SERVER_ERROR;
                 break;
 
             case "404":
-                finalMap.put("message", "Data not found for the search record");
+                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_404);
                 status=HttpStatus.NOT_FOUND;
                 break;
 
             case "405":
-                finalMap.put("message", "Only get method is allowed");
+                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_405);
                 status=HttpStatus.METHOD_NOT_ALLOWED;
                 break;
 
-            case "400":
-                finalMap.put("message", "Bad request..");
+            default:
+                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_400);
                 status=HttpStatus.BAD_REQUEST;
-                break;
 
         }
         return ServerResponse.status(status)

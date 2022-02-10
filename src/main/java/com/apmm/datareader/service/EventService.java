@@ -32,7 +32,7 @@ public class EventService {
         log.info("Inside getEvents");
         return repository.findAll()
                 .switchIfEmpty(Mono.defer(()-> Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found in DB"))))
-                .flatMap((event)->{
+                .flatMap(event->{
                     if (StringUtil.isNullOrEmpty(event.getEventJson())){
                         return repository.save(this.convertXmlToJson(event));
                     }else
@@ -64,7 +64,7 @@ public class EventService {
         log.info("Inside getEventById || Id:: " +id);
         return repository.findByEventId(id)
                 .switchIfEmpty(Mono.defer(()->Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found for id - "+id))))
-                .flatMap((event)->{
+                .flatMap(event->{
                     if (StringUtil.isNullOrEmpty(event.getEventJson())){
                        return repository.save(this.convertXmlToJson(event));
                     }else
