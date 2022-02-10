@@ -6,43 +6,40 @@ import com.apmm.datareader.entity.Root;
 import com.apmm.datareader.exception.DataNotFoundException;
 import com.apmm.datareader.repository.EventRepository;
 import com.apmm.datareader.utils.AppUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventService {
-    @Autowired
-    private EventRepository repository;
-    @Autowired
-    private AppUtils appUtils;
+
+    private final EventRepository repository;
 
     public Flux<EventDto> getEvents() {
         log.info("Inside getEvents");
         return repository.findAll()
-                .switchIfEmpty(Mono.defer(()-> Mono.error(new DataNotFoundException("No data found in DB "))))
-                .doOnNext(this::convertXmlToJson)
-                .map(AppUtils::entityToDto);
-    }
-
-    public Mono<EventDto> getEventById(String id) {
-        log.info("Inside getEventById || Id:: " +id);
-        return repository.findByEventId(id)
-                .switchIfEmpty(Mono.defer(()->Mono.error(new DataNotFoundException("No data found for id - "+id))))
-                .doOnNext(this::convertXmlToJson)
+                .switchIfEmpty(Mono.defer(()-> Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found in DB"))))
+                .flatMap((event)->{
+                    if (StringUtil.isNullOrEmpty(event.getEventJson())){
+                        return repository.save(this.convertXmlToJson(event));
+                    }else
+                    {
+                        return Mono.just(event);
+                    }
+                })
                 .map(AppUtils::entityToDto);
     }
 
@@ -54,39 +51,45 @@ public class EventService {
 
     }
 
-    public Mono<EventDto> updateEvent(Mono<EventDto> eventDtoMono, String id){
-        log.info("Inside updateEvent "+id);
-        return repository.findById(id)
+    public Mono<EventDto> updateEventByEventId(Mono<EventDto> eventDtoMono, String id){
+        log.info("Inside updateEventByEventId "+id);
+        return repository.findByEventId(id)
                 .flatMap(e->eventDtoMono.map(AppUtils::dtoToEntity)
-                        .doOnNext(p->p.setId(id)))
+                        .doOnNext(p->p.setId(e.getId())))
                 .flatMap(repository::save)
                 .map(AppUtils::entityToDto);
     }
 
-    public  Mono<EventDto> convertXmlToJson(Event data){
+    public Mono<EventDto> getEventById(String id) {
+        log.info("Inside getEventById || Id:: " +id);
+        return repository.findByEventId(id)
+                .switchIfEmpty(Mono.defer(()->Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found for id - "+id))))
+                .flatMap((event)->{
+                    if (StringUtil.isNullOrEmpty(event.getEventJson())){
+                       return repository.save(this.convertXmlToJson(event));
+                    }else
+                    {
+                        return Mono.just(event);
+                    }
+                })
+                .map(AppUtils::entityToDto);
+    }
 
+    public  Event convertXmlToJson(Event data){
         log.info("Inside convertXmlToJson || Id:: "+ data.getId());
         String result = null;
         String xmlData = data.getEventMessage();
-
-        if ( StringUtil.isNullOrEmpty(data.getEventJson())) {
-            log.info("JSON data is null or empty || Id:: "+ data.getId());
             try {
                 JAXBContext jaxbContext = JAXBContext.newInstance(Root.class);
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
                 Root obj = (Root) unmarshaller.unmarshal(new StringReader(xmlData));
                 ObjectMapper mapper = new ObjectMapper();
                 result = mapper.writeValueAsString(obj);
-                log.debug("converted the xml to JSON : : " + result);
                 data.setEventJson(result);
             }
             catch (Exception e) {
                 log.error(e.getLocalizedMessage());
             }
-
-        }
-
-        return Mono.just(data).map(AppUtils::entityToDto);
+        return data;
     }
-
 }
