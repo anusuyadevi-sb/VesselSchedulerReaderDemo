@@ -16,4 +16,4 @@ spec:
         - name: "vesselschedulerreadercluster-37de"
           image: "vesselschedulerconatiner.azurecr.io/vesselschedulerreadercluster"
           ports:
-          - containerPort: 8080
+          - containerPort: 9991

@@ -1,4 +1,4 @@
 FROM openjdk:11
-EXPOSE 8080
+EXPOSE 9991
 ADD target/vesselschedulerreader.jar vesselschedulerreader.jar
 ENTRYPOINT ["java","-jar","/vesselschedulerreader.jar"]

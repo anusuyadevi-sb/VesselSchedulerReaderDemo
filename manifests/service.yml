@@ -5,10 +5,10 @@ metadata:
     labels:
         app: "vesselschedulerreadercluster-37de"
 spec:
-    type: LoadBalancer
+
     ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 9991
+      targetPort: 9991
       protocol: TCP
       name: http
     selector:

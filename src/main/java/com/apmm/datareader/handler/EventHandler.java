@@ -17,17 +17,17 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class EventHandler {
 
-   private final EventService eventService;
+    private final EventService eventService;
 
-   public Mono<ServerResponse> loadEvents(ServerRequest request){
-       Flux<EventDto> eventList = eventService.getEvents();
-       return ServerResponse.ok().body(eventList,EventDto.class);
-   }
+    public Mono<ServerResponse> loadEvents(ServerRequest request){
+        Flux<EventDto> eventList = eventService.getEvents();
+        return ServerResponse.ok().body(eventList,EventDto.class);
+    }
 
-   public  Mono<ServerResponse> loadEventById(ServerRequest request){
-       Mono<EventDto> event = eventService.getEventById(request.pathVariable("eventId"));
-       return ServerResponse.ok().body(event,EventDto.class);
-   }
+    public  Mono<ServerResponse> loadEventById(ServerRequest request){
+        Mono<EventDto> event = eventService.getEventById(request.pathVariable("eventId"));
+        return ServerResponse.ok().body(event,EventDto.class);
+    }
 
     public  Mono<ServerResponse> saveEvent(ServerRequest request){
         Mono<EventDto> event = eventService.save(request.bodyToMono(Event.class));
