@@ -5,7 +5,7 @@ metadata:
     labels:
         app: "vesselschedulerreadercluster-37de"
 spec:
-
+    type: LoadBalancer
     ports:
     - port: 9991
       targetPort: 9991
