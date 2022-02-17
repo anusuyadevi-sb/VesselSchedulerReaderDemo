@@ -17,7 +17,7 @@
 		<javax.activation.version>1.2.0</javax.activation.version>
 		<jaxb.api.version>2.3.0</jaxb.api.version>
 		<java.version>11</java.version>
-		<!--<spring-cloud.version>Hoxton.SR8</spring-cloud.version> -->
+
 		<spring-cloud.version>2021.0.0</spring-cloud.version>
 	</properties>
 	<dependencies>
@@ -105,19 +105,16 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.22</version>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webflux-core</artifactId>
-			<!--<version>1.5.12</version>-->
+			<version>1.5.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-webflux-ui</artifactId>
-			<!--<version>1.5.12</version>-->
+			<version>1.5.12</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -149,22 +146,6 @@
 		</plugins>
 		<finalName>vesselschedulerreader</finalName>
 	</build>
-	<!--<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-		</plugins>
-		<finalName>vesselschedulerreader</finalName>
-	</build>-->
+
 
 </project>

@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -69,7 +69,7 @@ public class RouterConfig {
                                             ))
                                     ),
                                     @ApiResponse(
-                                            responseCode = Constants.HTTP_STATUS_NOt_FOUND,
+                                            responseCode = Constants.HTTP_STATUS_NOT_FOUND,
                                             description = Constants.ERR_MSG_404,
                                             content = @Content(schema = @Schema(
                                                     implementation = EventDto.class

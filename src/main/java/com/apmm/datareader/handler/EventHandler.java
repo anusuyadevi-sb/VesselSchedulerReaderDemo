@@ -6,6 +6,7 @@ import com.apmm.datareader.entity.Event;
 import com.apmm.datareader.service.EventService;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -14,13 +15,14 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class EventHandler {
 
     private final EventService eventService;
 
     public Mono<ServerResponse> loadEvents(ServerRequest request){
-
+        log.info("loadEvents"+String.valueOf(request));
         Flux<EventDto> eventList = eventService.getEvents();
         return ServerResponse.ok().body(eventList,EventDto.class);
     }
