@@ -12,4 +12,10 @@ public class Constants {
     public static final String ERR_MSG_400="Bad request..";
     public static final String ERR_MSG_404="Data not found for the search record";
     public static final String ERR_MSG_405="Only get method is allowed";
+    public static final String HTTP_STATUS_OK="200";
+    public static final String SUCCESS_OPERATION="successful operation";
+    public static final String HTTP_STATUS_NOt_FOUND="404";
+    public static final String LOAD_EVENTS="loadEvents";
+    public static final String LOAD_EVENT_ID= "loadEventById";
+
 }
