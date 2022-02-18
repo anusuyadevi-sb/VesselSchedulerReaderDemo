@@ -3,6 +3,7 @@ package com.apmm.datareader.service;
 import com.apmm.datareader.dto.EventDto;
 import com.apmm.datareader.entity.Event;
 import com.apmm.datareader.entity.Root;
+import com.apmm.datareader.exception.BadRequestException;
 import com.apmm.datareader.exception.DataNotFoundException;
 import com.apmm.datareader.repository.EventRepository;
 import com.apmm.datareader.utils.AppUtils;
@@ -31,6 +32,7 @@ public class EventService {
     public Flux<EventDto> getEvents() {
         log.info("Inside getEvents");
         return repository.findAll()
+                .onErrorResume( Mono::error)
                 .switchIfEmpty(Mono.defer(()-> Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found in DB"))))
                 .flatMap(event->{
                     if (StringUtil.isNullOrEmpty(event.getEventJson())){
@@ -62,7 +64,11 @@ public class EventService {
 
     public Mono<EventDto> getEventById(String id) {
         log.info("Inside getEventById || Id:: " +id);
+        if(id != null && !id.matches("^[a-zA-Z0-9]*$")){
+            throw new BadRequestException(HttpStatus.BAD_REQUEST,"Bad request..");
+        }
         return repository.findByEventId(id)
+                .onErrorResume( Mono::error)
                 .switchIfEmpty(Mono.defer(()->Mono.error(new DataNotFoundException(HttpStatus.NOT_FOUND,"No data found for id - "+id))))
                 .flatMap(event->{
                     if (StringUtil.isNullOrEmpty(event.getEventJson())){

@@ -22,13 +22,13 @@ public class EventHandler {
     private final EventService eventService;
 
     public Mono<ServerResponse> loadEvents(ServerRequest request){
-        log.info("loadEvents::"+String.valueOf(request));
+        log.info("loadEvents::"+(request));
         Flux<EventDto> eventList = eventService.getEvents();
         return ServerResponse.ok().body(eventList,EventDto.class);
     }
 
     public  Mono<ServerResponse> loadEventById(ServerRequest request){
-        log.info("loadEventById::"+String.valueOf(request));
+        log.info("loadEventById::"+(request));
         Mono<EventDto> event = eventService.getEventById(request.pathVariable("eventId"));
         return ServerResponse.ok().body(event,EventDto.class);
     }

@@ -43,7 +43,8 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
 
         final Map<String, Object> map = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         log.info("errorPropertiesMap::"+map.toString());
-
+        String pathDetails=String.valueOf(map.get(Constants.PATH));
+        String[] splitPathDetails=pathDetails.split("/");
         Map<String,Object> finalMap=new HashMap<>();
         finalMap.put(Constants.STATUS,String.valueOf(map.get(Constants.STATUS)));
         finalMap.put(Constants.RESOURCES,String.valueOf(map.get(Constants.PATH)));
@@ -58,8 +59,19 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
                 break;
 
             case "404":
-                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_404);
-                status=HttpStatus.NOT_FOUND;
+
+                if(splitPathDetails.length==3){
+                    finalMap.put(Constants.STATUS,Constants.HTTP_STATUS_BAD_REQUEST);
+                    finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_400_ID_NOT_AVAIL);
+                    status=HttpStatus.BAD_REQUEST;
+                }
+                else {
+                    if(splitPathDetails[2].equals(Constants.EVENT))
+                    finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_404_ID_NOT_FOUND+splitPathDetails[3]);
+                   else
+                        finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_404);
+                    status = HttpStatus.NOT_FOUND;
+                }
                 break;
 
             case "405":
@@ -68,7 +80,7 @@ public class GlobalErrorWebExceptionHandler extends AbstractErrorWebExceptionHan
                 break;
 
             default:
-                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_400);
+                finalMap.put(Constants.MESSAGE, Constants.ERR_MSG_400_ID_NOT_VALID);
                 status=HttpStatus.BAD_REQUEST;
 
         }

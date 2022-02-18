@@ -70,7 +70,7 @@ public class RouterConfig {
                                     ),
                                     @ApiResponse(
                                             responseCode = Constants.HTTP_STATUS_NOT_FOUND,
-                                            description = Constants.ERR_MSG_404,
+                                            description = Constants.ERR_MSG_404_ID_NOT_FOUND,
                                             content = @Content(schema = @Schema(
                                                     implementation = EventDto.class
                                             )
